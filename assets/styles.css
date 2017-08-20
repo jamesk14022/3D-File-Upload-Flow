@@ -1,0 +1,105 @@
+div.container{
+	background-color: #e5e5e5;
+	padding: 10px 40px;
+	padding-bottom: 5px;
+	border-radius: 4px;
+	border-radius: .5px solid #b5b5b5;
+}
+div#canvas-section{
+	height: 550px;
+	width: auto;
+}
+div.col-left{
+	height: 100%;
+}
+div.container table{
+	margin-bottom: 10px;
+}
+hr#table-divider{
+	margin-top: 0px;
+}
+div.price-box{
+	border-left: 1px solid black;
+	padding: 10px 0px;
+}
+h2#price-tag{
+	margin-left: 25px;
+	margin-top: 10px;
+	font-size: 45px;
+}
+span#lbl-vat{
+	font-size: 18px;
+}
+div.container-index h2{
+	margin-bottom: 25px;
+}
+div.container-index ul{
+	list-style: none;
+	padding-left: 10px;
+}
+div.container-index span.glyphicon-folder-open{
+	margin-right: 10px;
+}
+div.container-index span.label-info{
+	font-size: 17px;
+	margin-top: 10px;
+}
+p#lbl-controls{
+	color: #a6a7a8;
+	margin-top: 5px;
+}
+div.top-bar{
+	padding-left: 0px;
+}
+label.btn-browse{
+	margin-left: 0px;
+}
+div.container hr{
+	border-top: 1px solid #a6a7a8;
+}
+button.btn-back{
+	margin: 0px 0px;
+	margin-bottom: 10px;
+}
+div#section-right{
+	height: 550px;
+}
+div.btn-colour button{
+	margin-left: 15px !important;
+	border-radius: 3px !important;
+}
+div.btn-colour label.btn-secondary{
+	background-color: #a8a8a4;
+	color: white;
+}
+label.btn-option{
+	margin-left: 15px !important;
+	border-radius: 3px !important;
+}
+button.btn-block{
+	margin-top: 5px;
+}
+
+/*fancy checkbox css */
+	.form-group input[type="checkbox"] {
+	    display: none;
+	}
+
+	.form-group input[type="checkbox"] + .btn-group > label span {
+	    width: 20px;
+	}
+
+	.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+	    display: none;
+	}
+	.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+	    display: inline-block;   
+	}
+
+	.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+	    display: inline-block;
+	}
+	.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+	    display: none;   
+	}
+/*end fancy checkbox css */
