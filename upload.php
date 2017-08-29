@@ -12,7 +12,7 @@ if($fileType != 'stl' && $fileType != 'STL' && $fileType != 'obj' && $fileType !
 
 if($uploadOK == 1){
 	if(move_uploaded_file($_FILES['stlUpload']['tmp_name'], $target_file)){
-		echo 'The file ' . basename($_FILES['stlUpload']['name']) . ' has been uploaded';
+		echo 'uploaded';
 	}else{
 		echo 'The file has failed to upload';
 	}

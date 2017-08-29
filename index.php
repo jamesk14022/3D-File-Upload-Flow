@@ -10,6 +10,11 @@
 	<script src="assets/STLLoader.js" type="text/javascript"></script>
 	<script src="assets/OrbitControls.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="assets/styles.css" type="text/css">
+
+<link href="http://hayageek.github.io/jQuery-Upload-File/4.0.10/uploadfile.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://hayageek.github.io/jQuery-Upload-File/4.0.10/jquery.uploadfile.min.js"></script>
+
 </head>
 <body>
 <div class="container">
@@ -40,33 +45,14 @@
 </div>
   
 <div class="row">
-	<div class="col-md-2"></div>
-	<div class="col-md-3 upload-box">
+	<div class="col-md-5 upload-vector"><img src="assets/factory-vector.png" class="img-responsive" /></div>
+	<div class="col-md-5 col-md-offset-1 upload-box">
 		<div id="upload">
 			<h2>Upload a file</h2>
-			<form action="upload.php" method="post" enctype="multipart/form-data">
-			<label class="btn btn-primary btn-browse" for="stl-input">
-		    <input id="stl-input" name="stlUpload" type="file" style="display:none" 
-		    onchange="$('#upload-file-info').html(this.files[0].name)">
-		    Browse for a File
-			</label>
-		  	<button type="submit" class="btn btn-default">Submit</button>
-		  	<span class='label label-info' id="upload-file-info"></span>
-			</form>
+			<div id="singleupload">Browse for a 3D File</div>
 			<p>We accept .stl and .obj file types, <a>contact us</a> for a quote otherwise.</p> 
 		</div>
 	</div>
-	<div class="col-md-1"></div>
-	<div class="col-md-4">
-	<h2>Use an Existing File</h2>
-	<ul>
-		<?php $target_dir = 'stl-uploads'; ?>
-		<?php foreach(array_slice(scandir($target_dir), 2) as $f): ?>
-		<li><a href="view.php?file=<?php echo $f; ?>"><span class="glyphicon glyphicon-folder-open"></span><?php echo $f; ?></a></li>
-		<?php endforeach; ?>
-	</ul>
-	</div>
-	<div class="col-md-2"></div>
 </div>
 </div>
 
@@ -153,7 +139,29 @@
 		$(this).tab('show')
 	})
 	});
-</script
+
+	$(document).ready(function(){
+	var upload = $("#singleupload").uploadFile({
+	url:"upload.php",
+	multiple:false,
+	dragDrop:false,
+	maxFileCount:1,
+	fileName:"stlUpload",
+	autoSubmit:"true",
+	uploadStr:"Browse for a 3D File",
+	onSuccess:function(files,data,xhr,pd){
+		if( data == 'uploaded'){
+			window.location.href = 'view.php?file=' + files
+		}else{
+			alert( data )
+			upload.reset()
+		}
+	}
+	}); 
+	// var response = upload.getResponses();
+	// console.log(response);
+	});
+</script>
 </body>
 </html>
 

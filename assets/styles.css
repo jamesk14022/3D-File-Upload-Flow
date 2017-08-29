@@ -17,6 +17,11 @@ div.container.main.container-index{
 div.container-tabs{
 	margin-top: 15px;
 }
+div.upload-vector img{
+	max-height: 350px;
+	width: auto;
+	margin: 0px auto;
+}
 div.index-steps{
 	margin-bottom: 30px !important;
 }
@@ -30,18 +35,22 @@ img.img-branding{
 }
 div.upload-box{
 	border: 4px dashed #707070;
-	height: 250px;
 	text-align: center;
 }
 div#upload{
 	margin: auto auto;
-	padding-top: 15%;
-	overflow: hidden;
 }
 div#upload p{
 	font-size: 12px;
 	margin-top: 5%;
 	color: #333;
+}
+div.ajax-file-upload-statusbar{
+	text-align: center;
+	margin: 0px auto;
+}
+div.ajax-file-upload-filename{
+	margin: 0px auto;
 }
 div.container h6{
 	margin-top: 5px;
