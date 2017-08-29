@@ -1,9 +1,40 @@
 div.container{
+	padding: 0px;
+}
+div.container.main{
 	background-color: #e5e5e5;
 	padding: 10px 40px;
 	padding-bottom: 5px;
 	border-radius: 4px;
 	border-radius: .5px solid #b5b5b5;
+}
+div.container.main.container-index{
+	padding-bottom: 50px;
+}
+img.img-branding{
+	width: 70%;
+	height: 70%;
+}
+div.upload-box{
+	border: 4px dashed #707070;
+	height: 250px;
+}
+div#upload{
+	height: 100px;
+	width: 250px;
+	margin: auto auto;
+	padding-top: 50px;
+}
+div.container h6{
+	margin-top: 5px;
+}
+div.container ul.nav.nav-pills{
+	margin-bottom: 5px;
+}
+div.file-name{
+	margin-bottom: 15px;
+	clear: right;
+	word-wrap: break-word;
 }
 div#canvas-section{
 	height: 550px;
@@ -29,6 +60,9 @@ h2#price-tag{
 }
 span#lbl-vat{
 	font-size: 18px;
+}
+div.container-index{
+	padding-bottom: 100px;
 }
 div.container-index h2{
 	margin-bottom: 25px;
@@ -103,3 +137,33 @@ button.btn-block{
 	    display: none;   
 	}
 /*end fancy checkbox css */
+
+hr#footer-sep{
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+
+ul#footer-links{
+	margin-left: 0px;
+	padding-left: 5px;
+}
+
+ul#footer-links li{
+	list-style: none;
+	display: inline;
+	margin-right: 15px;
+}
+
+/*step css*/
+
+ul.nav.nav-pills{
+	background-color: #e5e5e5;
+	border: none;
+}
+
+ul.nav.nav-pills li{
+	background-color: #fff;
+	margin: 5px;
+}
+
+/*end css */

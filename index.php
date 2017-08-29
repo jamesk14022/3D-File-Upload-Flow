@@ -12,20 +12,48 @@
 	<link rel="stylesheet" href="assets/styles.css" type="text/css">
 </head>
 <body>
-<div class="container container-index">
+<div class="container">
+<div class="row">
+	<div class="col-md-3"><img src="assets/v3d.png" class="img-responsive img-branding" /></div>
+	<div class="col-md-9"></div>
+</div>
+<hr>
+</div>
+<div class="container container-index main">
+<div class="row form-group">
+    <div class="col-xs-12">
+        <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+            <li class="active"><a href="#step-1">
+                <h4 class="list-group-item-heading">Step 1</h4>
+                <p class="list-group-item-text">Upload a 3D File</p>
+            </a></li>
+            <li class="disabled"><a href="#step-2">
+                <h4 class="list-group-item-heading">Step 2</h4>
+                <p class="list-group-item-text">Select Print Options</p>
+            </a></li>
+            <li class="disabled"><a href="#step-3">
+                <h4 class="list-group-item-heading">Step 3</h4>
+                <p class="list-group-item-text">Enter Your Details</p>
+            </a></li>
+        </ul>
+    </div>
+</div>
+  
 <div class="row">
 	<div class="col-md-2"></div>
-	<div class="col-md-3">
-	<h2>Upload a file</h2>
-	<form action="upload.php" method="post" enctype="multipart/form-data">
-	<label class="btn btn-primary btn-browse" for="stl-input">
-    <input id="stl-input" name="stlUpload" type="file" style="display:none" 
-    onchange="$('#upload-file-info').html(this.files[0].name)">
-    Browse for a File
-	</label>
-  	<button type="submit" class="btn btn-default">Submit</button>
-  	<span class='label label-info' id="upload-file-info"></span>
-	</form>
+	<div class="col-md-3 upload-box">
+		<div id="upload">
+		<h2>Upload a file</h2>
+		<form action="upload.php" method="post" enctype="multipart/form-data">
+		<label class="btn btn-primary btn-browse" for="stl-input">
+	    <input id="stl-input" name="stlUpload" type="file" style="display:none" 
+	    onchange="$('#upload-file-info').html(this.files[0].name)">
+	    Browse for a File
+		</label>
+	  	<button type="submit" class="btn btn-default">Submit</button>
+	  	<span class='label label-info' id="upload-file-info"></span>
+		</form>
+		</div>
 	</div>
 	<div class="col-md-1"></div>
 	<div class="col-md-4">
@@ -39,6 +67,13 @@
 	</div>
 	<div class="col-md-2"></div>
 </div>
+</div>
+<div class="container">
+<hr id="footer-sep">
+<ul id="footer-links">
+	<li><a href="">PrintWorks</a></li>
+	<li><a href="">Contact PrintWorks</a></li>
+</ul>
 </div>
 </body>
 </html>

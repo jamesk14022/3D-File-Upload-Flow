@@ -60,7 +60,32 @@
 </head>
 <body>
 <div class="container">
+<div class="row">
+	<div class="col-md-3"><img src="assets/v3d.png" class="img-responsive img-branding" /></div>
+	<div class="col-md-9"></div>
+</div>
+<hr>
+</div>
+<div class="container main">
 <div class="row"><div class="col-md-12 top-bar"><button class="btn btn-secondary btn-back"><a href="index.php"><span class="glyphicon glyphicon-chevron-left"></span>Upload a Different Model</a></button></div>
+<div class="row form-group">
+    <div class="col-xs-12">
+        <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+            <li class="disabled"><a href="#step-1">
+                <h4 class="list-group-item-heading">Step 1</h4>
+                <p class="list-group-item-text">Upload a 3D File</p>
+            </a></li>
+            <li class="active"><a href="#step-2">
+                <h4 class="list-group-item-heading">Step 2</h4>
+                <p class="list-group-item-text">Select Print Options</p>
+            </a></li>
+            <li class="disabled"><a href="#step-3">
+                <h4 class="list-group-item-heading">Step 3</h4>
+                <p class="list-group-item-text">Enter Your Details</p>
+            </a></li>
+        </ul>
+    </div>
+</div>
 <div class="row">
 <div class="col-md-6 col-sm-12 col-left">
 <div id="canvas-section">
@@ -87,6 +112,44 @@
 			price = price + 5;
 		}
 		document.getElementById('price').innerHTML = Math.round(price);
+		document.getElementById('priceHiddenField').value = Math.round(price);
+	}
+
+	function geoFromOBJ(){
+
+		<?php if($file_extension == 'obj'  || $file_extension == 'OBJ'): ?>
+
+		<?php
+			include('tools/OBJAnalysis.php');
+			$obj = new OBJAnalysis( 'stl-uploads/' . $file_name ); 
+			$obj->readOBJGeometry();
+		?>
+
+		var geometry = new THREE.Geometry();
+
+		geometry.vertices.push(
+			<?php $i = 0; ?>
+			<?php foreach($obj->faces() as $array): ?>
+				new THREE.Vector3( <?= $array[0] ?>,  <?= $array[1] ?>, <?= $array[2] ?> )
+				<?php if($i != count($obj->faces())): ?>
+					,
+				<?php endif; ?>
+			<?php endforeach;?>
+		);
+
+		geometry.faces.push(
+			<?php $i = 0; ?>
+			<?php foreach($obj->faces() as $array): ?>
+				new THREE.Face3( <?= $array[0] ?>, <?= $array[1] ?>, <?= $array[2] ?> )
+				<?php if($i != count($obj->faces())): ?>
+					,
+				<?php endif; ?>
+			<?php endforeach; ?>
+		);
+
+		return geometry;
+
+		<?php endif; ?>
 	}
 
 	function volumeOfT(p1, p2, p3){
@@ -217,6 +280,8 @@
 	    	shape.position = new THREE.Vector3(0, 0, 0);   
 
 	    	simpleGEO = new THREE.Geometry().fromBufferGeometry( geometry );
+	    	
+	    	console.log( simpleGEO );
 	    	initMeasure( simpleGEO );
 
 	    	scene.add( shape );
@@ -226,7 +291,8 @@
 		    initLights();
 		    animate();
 
-			controls = new THREE.OrbitControls( camera );
+		    canvas = document.getElementById('canvas-section');
+			controls = new THREE.OrbitControls( camera, canvas );
 			controls.target = shape.geometry.boundingSphere.center;
 			controls.update;
 
@@ -235,34 +301,29 @@
 	}else if(fileExtension == 'obj' || fileExtension == 'OBJ'){
 		var loader = new THREE.OBJLoader();
 
-		loader.load( './stl-uploads/<?php echo $file_name; ?>', function ( obj ) {
-
+		loader.load( './stl-uploads/<?php echo $file_name; ?>', function ( group ) {
 	    	var material = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, specular: 0x111111, shininess: 10 });
-	    	var geo = new THREE.BufferGeometry();
-	    	geo.setFromObject( obj );
-	    	geo.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
-	    	var simpleGeo = new THREE.Geometry().fromBufferGeometry(geo);
-	    	simpleGeo.computeFaceNormals();
- 			simpleGeo.mergeVertices();
-			simpleGeo.computeVertexNormals();
-	    	simpleGeo.elementsNeedUpdate = true;
+			scene.add( group );
+			var GEO = new THREE.BufferGeometry;
+			GEO.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
+			GEO.setFromObject( group );
+			var simpleGEO = new THREE.Geometry().fromBufferGeometry( GEO );
+			shape = new THREE.Mesh( simpleGEO, material);
 
-	    	shape = new THREE.Mesh( geo , material);
-
-	    	scene.add( obj );
-	    	initCanvas();
+			initMeasure(geoFromOBJ()); 
+ 
+			initCanvas();
 		    initCamera( shape );
 		    initLights();
 		    animate();
 
-			controls = new THREE.OrbitControls( camera );
+		    canvas = document.getElementById('canvas-section');
+			controls = new THREE.OrbitControls( camera, canvas );
 			shape.geometry.computeBoundingSphere();
 			controls.target = shape.geometry.boundingSphere.center;
 			controls.update;
 
 			window.addEventListener( 'resize', onWindowResize, false );
-
-			initMeasure( simpleGeo );
     	});
 	}
 
@@ -282,7 +343,7 @@
 <hr id="table-divider">
 <label>Colour</label>
 <div class="btn-group btn-colour" data-toggle="buttons">
-	<label class="btn btn-primary btn-option"><input type="radio" name="colour-option" value="blue" onChange="changeColour('0x1313f2');">Blue</label>
+	<label class="btn btn-primary btn-option"><input type="radio" name="colour-option" value="blue" onChange="changeColour('0x1313f2');" checked>Blue</label>
 	<label class="btn btn-secondary btn-option"><input type="radio" name="colour-option" value="grey" onChange="changeColour('0x686868');">Grey</label>
 	<label class="btn btn-success btn-option"><input type="radio" name="colour-option" value="green" onChange="changeColour('0x11af19');">Green</label>
 	<label class="btn btn-danger btn-option"><input type="radio" name="colour-option" value="red" onChange="changeColour('0x1c42311');">Red</label>
@@ -327,11 +388,20 @@
 	<h2 id="price-tag">£<span id="price">15</span>.00<span id="lbl-vat"> + VAT</span></h2>
 </div>
 </div>
+<input type=hidden id="priceHiddenField" name="price" value="15" />
+<input type=hidden id="nameField" name="name" value="<?php echo $file_name; ?>" />
 <button type="submit" class="btn btn-primary btn-lg btn-block">Order a Print</button>
 </form>
 </div>
 </div>
 </div>
+</div>
+<div class="container">
+<hr id="footer-sep">
+<ul id="footer-links">
+	<li><a href="">PrintWorks</a></li>
+	<li><a href="">Contact PrintWorks</a></li>
+</ul>
 </div>
 </body>
 </html>
