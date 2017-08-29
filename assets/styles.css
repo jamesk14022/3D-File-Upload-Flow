@@ -1,6 +1,9 @@
 div.container{
 	padding: 0px;
 }
+.row{
+	margin: 0px !important;
+}
 div.container.main{
 	background-color: #e5e5e5;
 	padding: 10px 40px;
@@ -11,6 +14,16 @@ div.container.main{
 div.container.main.container-index{
 	padding-bottom: 50px;
 }
+div.container-tabs{
+	margin-top: 15px;
+}
+div.index-steps{
+	margin-bottom: 30px !important;
+}
+div.tab-pane{
+	padding: 15px;
+	padding-top: 40px;
+}
 img.img-branding{
 	width: 70%;
 	height: 70%;
@@ -18,12 +31,17 @@ img.img-branding{
 div.upload-box{
 	border: 4px dashed #707070;
 	height: 250px;
+	text-align: center;
 }
 div#upload{
-	height: 100px;
-	width: 250px;
 	margin: auto auto;
-	padding-top: 50px;
+	padding-top: 15%;
+	overflow: hidden;
+}
+div#upload p{
+	font-size: 12px;
+	margin-top: 5%;
+	color: #333;
 }
 div.container h6{
 	margin-top: 5px;
@@ -33,7 +51,6 @@ div.container ul.nav.nav-pills{
 }
 div.file-name{
 	margin-bottom: 15px;
-	clear: right;
 	word-wrap: break-word;
 }
 div#canvas-section{
@@ -138,8 +155,58 @@ button.btn-block{
 	}
 /*end fancy checkbox css */
 
+div.material-pane{
+}
+
+div.material-pane h3{
+	text-align: center;
+	margin: 15px 0px;
+	font-size: 22px;
+}
+
+div.material-pane img{
+	max-height: 150px;
+	width: auto;
+	margin: 0px auto;
+}
+
+div.material-pane ul{
+	margin-top: 20px;
+	padding-left: 15px;
+	text-align: center;
+}
+
+div.material-pane li{
+	list-style: none;
+}
+
+div.quote h2{
+	text-align: right;
+	font-size: 33px;
+	color: #337ab7;
+}
+
+div.quote ul{
+	margin-top: 35px;
+}
+
+div.quote span.glyphicon-check{
+	margin-right: 10px;
+}
+
+div.quote li{
+	text-align: right;
+	list-style: none;
+	font-size: 19px;
+	margin-bottom: 15px;
+}
+
+ul#myTabs{
+	margin-top: 25px;
+}
+
 hr#footer-sep{
-	margin-top: 40px;
+	margin-top: 20px;
 	margin-bottom: 10px;
 }
 
@@ -167,3 +234,11 @@ ul.nav.nav-pills li{
 }
 
 /*end css */
+
+div.container.receipt h2{
+	margin-top: 0px;
+}
+
+div.container.receipt a{
+	margin-bottom: 20px;
+}

@@ -396,6 +396,7 @@
 </div>
 </div>
 </div>
+</div>
 <div class="container">
 <hr id="footer-sep">
 <ul id="footer-links">
