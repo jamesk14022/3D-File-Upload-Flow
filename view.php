@@ -54,7 +54,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.js" type="text/javascript"></script>
 	<script src="assets/STLLoader.js" type="text/javascript"></script>
-	<script src="assets/OBJLoader.js" type="text/javascript"></script>
+	<script src="assets/OBJLoader2.js" type="text/javascript"></script>
 	<script src="assets/OrbitControls.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="assets/styles.css" type="text/css">
 </head>
@@ -91,28 +91,89 @@
 <div id="canvas-section">
 <canvas id="stl-canvas"></canvas>
 </div>
+<p id="lbl-unit">Model Unit: </p>
+<label class="radio-inline"><input type="radio" name="optradio" value="mm" onchange="changeUnit('mm'); changePrice();" checked>mm</label>
+<label class="radio-inline"><input type="radio" name="optradio" value="cm" onchange="changeUnit('cm'); changePrice();">cm</label>
+<label class="radio-inline"><input type="radio" name="optradio" value="inches" onchange="changeUnit('inches'); changePrice();">inches</label>
 <p id="lbl-controls">Left mouse - orbit / right mouse - pan / scroll wheel - zoom</p>
 <script>
+	
+	function getPrice(units, volume, factor, speedyDelivery, polishing){
+		//this method is designed to be quite flexible - for this reason,
+		//factor, which volume type to use are both set in changePrice()
+		//material type isnt needed as factor is dependant on it
 
-	function calcPrice(){
+		// units will be mm, cm or i
+		//method for determining model price - this will vary between beareuas
+		//factor is essentially price per cm^3
+
 		var price;
-		if(document.getElementById('material-abs').checked == true){
-			price = 15;
+		var speedyDeliveryPrice = 5;
+		var polishingPrice = 5;
+
+		console.log( units );
+
+		//standardise units to cm
+		if(units != 'cm'){
+			if(units == 'mm'){
+				volume = volume * 0.001;	
+			}else if(units == 'inches'){
+				volume = volume * 16.3871;
+			}
 		}
-		if(document.getElementById('material-sls').checked == true){
-			price = 25;
+
+		price = volume * factor; 
+
+		if(speedyDelivery){
+			price = price + speedyDeliveryPrice;
 		}
-		if(document.getElementById('material-resin').checked == true){
-			price = 35;
+		if(polishing){
+			price = price + polishingPrice;
 		}
+
+		return price;
+	}	
+
+	function changePrice(){
+
+		var price;
+		var polishing = false;
+		var speedyDelivery = false;
+
 		if(document.getElementById('checkbox-polished').checked == true){
-			price = price * 1.1;
+			polishing = true;
 		}
 		if(document.getElementById('checkbox-delivery').checked == true){
-			price = price + 5;
+			speedyDelivery = true;
 		}
+
+		var units = document.getElementById('unitField').value;
+		//set to use boundingboxvolume
+		var volume = document.getElementById('volume-box').innerHTML;
+
+
+		if(document.getElementById('material-abs').checked == true){
+			price = getPrice(units, volume, 1.2, speedyDelivery, polishing);
+		}
+		if(document.getElementById('material-sls').checked == true){
+			price = getPrice(units, volume, 1.4, speedyDelivery, polishing);
+		}
+		if(document.getElementById('material-resin').checked == true){
+			price = getPrice(units, volume, 1.5, speedyDelivery, polishing);
+		}
+
 		document.getElementById('price').innerHTML = Math.round(price);
 		document.getElementById('priceHiddenField').value = Math.round(price);
+	}
+
+	function changeUnit(unit){
+		var unitElements = document.getElementsByClassName('units');
+		var arLength = unitElements.length;
+		for (var i = 0; i < arLength; i++) {
+		    unitElements[i].innerHTML = unit;
+		}
+
+		document.getElementById('unitField').value = unit;
 	}
 
 	function geoFromOBJ(){
@@ -148,7 +209,6 @@
 		);
 
 		return geometry;
-
 		<?php endif; ?>
 	}
 
@@ -176,7 +236,8 @@
 	        volumes += volumeOfT(P, Q, R);
 	    }
 
-	    document.getElementById(type).innerHTML = Math.round(Math.abs(volumes)) + ' units';
+	    document.getElementById(type).innerHTML = Math.round(Math.abs(volumes));
+	    document.getElementById('volumeField').value = Math.round(Math.abs(volumes));
 	}
 
 	function calculateVolumeSphere(radius){
@@ -185,7 +246,7 @@
 		return volume.toFixed(4);
  	} 
 
-	function addShadowedLight( x, y, z, color, intensity ) {
+	function addShadowedLight(x, y, z, color, intensity ) {
 		var directionalLight = new THREE.DirectionalLight( color, intensity );
 		directionalLight.position.set( x, y, z );
 		scene.add( directionalLight );
@@ -235,20 +296,25 @@
     	simpleGeometry.computeBoundingSphere();
 
     	calculateVolume( simpleGeometry, 'volume' );
-    	document.getElementById('volume-box').innerHTML = Math.round(multiply(simpleGeometry.boundingBox.getSize().toArray())) + ' units';
-    	document.getElementById('volume-sphere').innerHTML = Math.round(calculateVolumeSphere(simpleGeometry.boundingSphere.radius)) + ' units';
+    	document.getElementById('volume-box').innerHTML = Math.round(multiply(simpleGeometry.boundingBox.getSize().toArray()));
+    	document.getElementById('volume-sphere').innerHTML = Math.round(calculateVolumeSphere(simpleGeometry.boundingSphere.radius));
     }
 
 	function initCamera(shape){
-		var boundingBox = shape.boundingBox;
+		shape.geometry.computeBoundingBox();
+		shape.geometry.computeBoundingSphere();
+		var bBox = shape.geometry.boundingBox;
+		var bSphere = shape.geometry.boundingSphere;
 
 		camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
-		camera.position.x = 20;
-		camera.position.z = 20;
+		camera.position.y = 30;
+		camera.position.x = 10;
 
-		// var cameraDist = camera.position.distanceTo( shape.position );
-		// camera.fov = 2 * Math.atan( boundingBox.y / ( 2 * cameraDist ) ) * ( 180 / Math.PI );
-		// camera.updateProjectionMatrix();
+		var dist = camera.position.distanceTo( bSphere.center ) - (bSphere.radius);
+		var fov = Math.atan( bBox.getSize().y / ( dist ) ) * ( 180 / Math.PI ); // in degrees
+
+		camera.fov = fov + 20;
+		camera.updateProjectionMatrix();
 	}
 
 	function initCanvas(){
@@ -294,37 +360,45 @@
 		    canvas = document.getElementById('canvas-section');
 			controls = new THREE.OrbitControls( camera, canvas );
 			controls.target = shape.geometry.boundingSphere.center;
-			controls.update;
+			controls.update();
 
 			window.addEventListener( 'resize', onWindowResize, false );
-    	});
-	}else if(fileExtension == 'obj' || fileExtension == 'OBJ'){
-		var loader = new THREE.OBJLoader();
+    });
+	// }else if(fileExtension == 'obj' || fileExtension == 'OBJ'){
+	// 	var loader = new THREE.OBJLoader2();
 
-		loader.load( './stl-uploads/<?php echo $file_name; ?>', function ( group ) {
-	    	var material = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, specular: 0x111111, shininess: 10 });
-			scene.add( group );
-			var GEO = new THREE.BufferGeometry;
-			GEO.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
-			GEO.setFromObject( group );
-			var simpleGEO = new THREE.Geometry().fromBufferGeometry( GEO );
-			shape = new THREE.Mesh( simpleGEO, material);
+	// 	loader.load( './stl-uploads/<?php echo $file_name; ?>', function ( group ) {
 
-			initMeasure(geoFromOBJ()); 
+	// 		group.traverse( function ( child ) {
+	// 			if ( child.geometry !== undefined ) {
+	// 				console.log( child.geometry.vertices );
+	// 			}
+	// 			} );
+
+	//     	var material = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, specular: 0x111111, shininess: 10 });
+	// 		var GEO = new THREE.BufferGeometry;
+	// 		GEO.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
+	// 		GEO.setFromObject( group );
+
+	// 		shape = new THREE.Mesh( GEO , material); 
+
+	// 		scene.add( group );
+
+	// 		initMeasure(geoFromOBJ()); 
  
-			initCanvas();
-		    initCamera( shape );
-		    initLights();
-		    animate();
+	// 		initCanvas();
+	// 	    initCamera( shape );
+	// 	    initLights();
+	// 	    animate();
 
-		    canvas = document.getElementById('canvas-section');
-			controls = new THREE.OrbitControls( camera, canvas );
-			shape.geometry.computeBoundingSphere();
-			controls.target = shape.geometry.boundingSphere.center;
-			controls.update;
+	// 	    canvas = document.getElementById('canvas-section');
+	// 		controls = new THREE.OrbitControls( camera, canvas );
+	// 		controls.target = shape.geometry.boundingSphere.center;
+	// 		controls.update;
 
-			window.addEventListener( 'resize', onWindowResize, false );
-    	});
+	// 		window.addEventListener( 'resize', onWindowResize, false );
+ //    	});
+
 	}
 
 </script>
@@ -336,15 +410,15 @@
 	<tr><td>File Name</td><td><?php echo $file_name; ?></td></tr>
 	<tr><td>Faces</td><td id="faces"></td></tr>
 	<tr><td>File Size</td><td><?php echo $file_size; ?></td></tr>
-	<tr><td>Model Volume</td><td id="volume"></td></tr>
-	<tr><td>Model Volume(bounding box)</td><td id="volume-box"></td></tr>
-	<tr><td>Model Volume(bouding sphere)</td><td id="volume-sphere"></td></tr>
+	<tr><td>Model Volume</td><td><span id="volume"></span> <span class="units">mm</span><sup>3</sup></td></tr>
+	<tr><td>Model Volume(bounding box)</td><td><span id="volume-box"></span> <span class="units">mm</span><sup>3</sup></td></tr>
+	<tr><td>Model Volume(bouding sphere)</td><td><span id="volume-sphere"></span> <span class="units">mm</span><sup>3</sup></td></tr>
 </table>
 <hr id="table-divider">
 <label>Colour</label>
 <div class="btn-group btn-colour" data-toggle="buttons">
 	<label class="btn btn-primary btn-option"><input type="radio" name="colour-option" value="blue" onChange="changeColour('0x1313f2');" checked>Blue</label>
-	<label class="btn btn-secondary btn-option"><input type="radio" name="colour-option" value="grey" onChange="changeColour('0x686868');">Grey</label>
+	<label class="btn btn-secondary btn-option focus active"><input type="radio" name="colour-option" value="grey" onChange="changeColour('0x686868');" checked="checked">Grey</label>
 	<label class="btn btn-success btn-option"><input type="radio" name="colour-option" value="green" onChange="changeColour('0x11af19');">Green</label>
 	<label class="btn btn-danger btn-option"><input type="radio" name="colour-option" value="red" onChange="changeColour('0x1c42311');">Red</label>
 	<label class="btn btn-warning btn-option"><input type="radio" name="colour-option" value="yellow" onChange="changeColour('0xedd62d');">Yellow</label>
@@ -352,15 +426,15 @@
 <hr>
 <label>Material</label>
 <div class="btn-group" data-toggle="buttons">
-	<label class="btn btn-primary btn-option"><input type="radio" name="material-option" value="material-abs" id="material-abs" onchange="calcPrice();" checked>ABS</label>
-	<label class="btn btn-primary btn-option"><input type="radio" name="material-option" value="material-sls" id="material-sls" onchange="calcPrice();">SLS Nylon</label>
-	<label class="btn btn-primary btn-option"><input type="radio" name="material-option" value="material-resin" id="material-resin" onchange="calcPrice();">High Detail Resin</label>
+	<label class="btn btn-primary btn-option focus active"><input type="radio" name="material-option" value="material-abs" id="material-abs" onchange="changePrice();" checked="checked" />ABS</label>
+	<label class="btn btn-primary btn-option"><input type="radio" name="material-option" value="material-sls" id="material-sls" onchange="changePrice();" />SLS Nylon</label>
+	<label class="btn btn-primary btn-option"><input type="radio" name="material-option" value="material-resin" id="material-resin" onchange="changePrice();" />High Detail Resin</label>
 </div>
 <hr>
 <div class="row">
 <div class="col-md-6  col-sm-6 col-xs-6">
 	<div class="[ form-group ]">
-	    <input type="checkbox" name="checkbox-polished" id="checkbox-polished" autocomplete="off" onchange="calcPrice();" />
+	    <input type="checkbox" name="checkbox-polished" id="checkbox-polished" autocomplete="off" onchange="changePrice();" />
 	    <div class="[ btn-group ]">
 	        <label for="checkbox-polished" class="[ btn btn-default ]">
 	            <span class="[ glyphicon glyphicon-ok ]"></span>
@@ -372,7 +446,7 @@
 	    </div>
 	</div>
 	<div class="[ form-group ]">
-	    <input type="checkbox" name="checkbox-delivery" id="checkbox-delivery" autocomplete="off" onchange="calcPrice();"/>
+	    <input type="checkbox" name="checkbox-delivery" id="checkbox-delivery" autocomplete="off" onchange="changePrice();"/>
 	    <div class="[ btn-group ]">
 	        <label for="checkbox-delivery" class="[ btn btn-default ]">
 	            <span class="[ glyphicon glyphicon-ok ]"></span>
@@ -389,7 +463,9 @@
 </div>
 </div>
 <input type=hidden id="priceHiddenField" name="price" value="15" />
+<input type=hidden id="unitField" name="unit" value="mm" />
 <input type=hidden id="nameField" name="name" value="<?php echo $file_name; ?>" />
+<input type=hidden id="volumeField" name="volume" value="" />
 <button type="submit" class="btn btn-primary btn-lg btn-block">Order a Print</button>
 </form>
 </div>
@@ -404,5 +480,10 @@
 	<li><a href="">Contact PrintWorks</a></li>
 </ul>
 </div>
+<script type="text/javascript">
+	$(document).ready( function(){
+		changePrice();
+	});
+</script>
 </body>
 </html>

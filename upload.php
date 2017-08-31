@@ -5,9 +5,9 @@ $target_file = $target_dir . basename($_FILES['stlUpload']['name']);
 $uploadOK = 1;
 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-if($fileType != 'stl' && $fileType != 'STL' && $fileType != 'obj' && $fileType != 'OBJ'){
+if($fileType != 'stl' && $fileType != 'STL'){
 	$uploadOK = 0;
-	echo nl2br("Only stl and obj files can be uploaded. \n");
+	echo nl2br("Only stl files can be uploaded. ");
 }
 
 if($uploadOK == 1){

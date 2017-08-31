@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>State:</strong></div>
+                    <div class="col-md-12"><strong>County/State:</strong></div>
                     <div class="col-md-12">
                         <input type="text" name="state" class="form-control" value="" />
                     </div>
@@ -138,16 +138,19 @@
             <div class="panel-body">
                 <div class="form-group">
                     <div class="col-sm-3 col-xs-3">
-                        <img class="img-responsive" src="//c1.staticflickr.com/1/466/19681864394_c332ae87df_t.jpg" />
+                        <img class="img-responsive" src="assets/cube.png" />
                     </div>
-                    <div class="col-sm-6 col-xs-6">
+                    <div class="col-sm-7 col-xs-7">
                         <div class="col-xs-12 file-name"><?php echo $name; ?></div>
+                        <div class="col-xs-12"><small>Volume : <span><?php echo $_POST['volume']; ?> <?php echo $_POST['unit']; ?><sup>3</sup></span></small></div>
                         <br />
+                        <div class="col-xs-12"><small>Quantity : <span><input id="quantity-input" name="quantity" value="1"></span></small></div>
                         <div class="col-xs-12"><small>Material : <span><?php echo $_POST['material-option']; ?></span></small></div>
                         <div class="col-xs-12"><small>Colour : <span><?php echo $_POST['colour-option']; ?></span></small></div>
                         <div class="col-xs-12"><small>Polishing : <span><?php echo (isset($_POST['checkbox-polished']) ? 'yes' : 'no'); ?></span></small></div>
+                        <div class="col-xs-12"><small>Unit : <span><?php echo $_POST['unit']; ?></span></small></div>
                     </div>
-                    <div class="col-sm-3 col-xs-3 text-right">
+                    <div class="col-sm-2 col-xs-2 text-right">
                         <h6><span>£</span><?php echo $price; ?></h6>
                     </div>
                 </div>

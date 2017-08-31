@@ -36,6 +36,7 @@ img.img-branding{
 div.upload-box{
 	border: 4px dashed #707070;
 	text-align: center;
+	margin-top: 7%;
 }
 div#upload{
 	margin: auto auto;
@@ -107,6 +108,11 @@ div.container-index span.label-info{
 p#lbl-controls{
 	color: #a6a7a8;
 	margin-top: 5px;
+}
+p#lbl-unit{
+	display: inline;
+	margin-top: 10px;
+	margin-right: 10px;
 }
 div.top-bar{
 	padding-left: 0px;
@@ -250,4 +256,9 @@ div.container.receipt h2{
 
 div.container.receipt a{
 	margin-bottom: 20px;
+}
+
+input#quantity-input{
+	max-width: 25px;
+	margin-left: 5px;
 }
