@@ -262,3 +262,9 @@ input#quantity-input{
 	max-width: 25px;
 	margin-left: 5px;
 }
+
+label.lbl-form{
+	color: black;
+	margin-left: 5px;
+	margin-bottom: 0px;
+}

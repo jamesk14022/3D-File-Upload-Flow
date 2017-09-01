@@ -16,6 +16,17 @@
 	<link rel="stylesheet" href="assets/styles.css" type="text/css">
 	<link rel="stylesheet" href="assets/checkout-styles.css" type="text/css">
 	<title></title>
+    <script type="text/javascript">
+        function calcTotal(){
+            var unitPrice = <?= $_POST['price']; ?>;
+            var q = document.getElementById('quantity-input').value;
+            var shippingCost = <?= $shipping_cost; ?>;
+
+            document.getElementById('cost-sub').innerHTML = unitPrice * q;
+            document.getElementById('cost-shipping').innerHTML = shippingCost;
+            document.getElementById('cost-total').innerHTML = unitPrice * q + shippingCost;
+        }
+    </script
 </head>
 <body>
 <div class="container">
@@ -53,48 +64,48 @@
             <div class="panel-heading"><i class="glyphicon glyphicon-home"></i><h3>Address</h3></div>
             <div class="panel-body">
                 <div class="form-group">
-                    <div class="col-md-12"><strong>Country:</strong></div>
-                    <div class="col-md-12">
-                        <input type="text" class="form-control" name="country" value="" />
+                    <div class="col-md-12"><label class="lbl-form"><strong>Country:</strong></label></div>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="country" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-6 col-xs-12">
-                        <strong>Full Name:</strong>
-                        <input type="text" name="full_name" class="form-control" value="" />
+                    <div class="col-md-10 col-xs-12">
+                        <label class="lbl-form"><strong>Full Name:</strong></label>
+                        <input type="text" name="full_name" class="form-control" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>Address:</strong></div>
-                    <div class="col-md-12">
-                        <input type="text" name="address" class="form-control" value="" />
+                    <div class="col-md-12"><label class="lbl-form"><strong>Address:</strong></label></div>
+                    <div class="col-md-10">
+                        <input type="text" name="address" class="form-control" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>City:</strong></div>
-                    <div class="col-md-12">
-                        <input type="text" name="city" class="form-control" value="" />
+                    <div class="col-md-12"><label class="lbl-form"><strong>City:</strong></label></div>
+                    <div class="col-md-10">
+                        <input type="text" name="city" class="form-control" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>County/State:</strong></div>
-                    <div class="col-md-12">
-                        <input type="text" name="state" class="form-control" value="" />
+                    <div class="col-md-12"><label class="lbl-form"><strong>County/State:</strong></label></div>
+                    <div class="col-md-10">
+                        <input type="text" name="state" class="form-control" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>Zip / Postal Code:</strong></div>
-                    <div class="col-md-12">
-                        <input type="text" name="zip_code" class="form-control" value="" />
+                    <div class="col-md-12"><label class="lbl-form"><strong>Zip / Postal Code:</strong></label></div>
+                    <div class="col-md-10">
+                        <input type="text" name="zip_code" class="form-control" value="" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>Phone Number:</strong></div>
-                    <div class="col-md-12"><input type="text" name="phone_number" class="form-control" value="" /></div>
+                    <div class="col-md-12"><label class="lbl-form"><strong>Phone Number:</strong></label></div>
+                    <div class="col-md-10"><input type="text" name="phone_number" class="form-control" value="" required/></div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12"><strong>Email Address:</strong></div>
-                    <div class="col-md-12"><input type="text" name="email_address" class="form-control" value="" /></div>
+                    <div class="col-md-12"><label class="lbl-form"><strong>Email Address:</strong></label></div>
+                    <div class="col-md-10"><input type="text" name="email_address" class="form-control" value="" required/></div>
                 </div>
             </div>
         </div>
@@ -144,7 +155,7 @@
                         <div class="col-xs-12 file-name"><?php echo $name; ?></div>
                         <div class="col-xs-12"><small>Volume : <span><?php echo $_POST['volume']; ?> <?php echo $_POST['unit']; ?><sup>3</sup></span></small></div>
                         <br />
-                        <div class="col-xs-12"><small>Quantity : <span><input id="quantity-input" name="quantity" value="1"></span></small></div>
+                        <div class="col-xs-12"><small>Quantity : <span><input id="quantity-input" name="quantity" value="1" onChange="calcTotal();"></span></small></div>
                         <div class="col-xs-12"><small>Material : <span><?php echo $_POST['material-option']; ?></span></small></div>
                         <div class="col-xs-12"><small>Colour : <span><?php echo $_POST['colour-option']; ?></span></small></div>
                         <div class="col-xs-12"><small>Polishing : <span><?php echo (isset($_POST['checkbox-polished']) ? 'yes' : 'no'); ?></span></small></div>
@@ -159,18 +170,18 @@
                 <div class="form-group">
                     <div class="col-xs-12">
                         <strong>Subtotal</strong>
-                        <div class="pull-right"><span>£</span><span><?php echo $price; ?></span></div>
+                        <div class="pull-right"><span>£</span><span id="cost-sub"></span></div>
                     </div>
                     <div class="col-xs-12">
                         <small>Shipping</small>
-                        <div class="pull-right"><span>£</span><span><?php echo $shipping_cost; ?></span></div>
+                        <div class="pull-right"><span>£</span><span id="cost-shipping"></span></div>
                     </div>
                 </div>
                 <div class="form-group"><hr /></div>
                 <div class="form-group">
                     <div class="col-xs-12">
                         <strong>Order Total</strong>
-                        <div class="pull-right"><span>£</span><span><?php echo (int)$price + (int)$shipping_cost; ?></span></div>
+                        <div class="pull-right"><span>£</span><span id="cost-total"></span></div>
                     </div>
                 </div>
             </div>
@@ -239,6 +250,10 @@ document.querySelector('form').addEventListener('submit', function(e) {
   };
   stripe.createToken(card, extraDetails).then(setOutcome);
 });
+});
+
+$(document).ready( function(){
+    calcTotal();
 });
 </script>
 </body>
